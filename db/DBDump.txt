@@ -1,0 +1,90 @@
+-- Database: EduTask
+
+-- DROP DATABASE IF EXISTS "EduTask";
+
+CREATE DATABASE "EduTask"
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Russian_Russia.1251'
+    LC_CTYPE = 'Russian_Russia.1251'
+    LOCALE_PROVIDER = 'libc'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+
+-- Вставка данных в таблицу users
+INSERT INTO users (user_name) VALUES 
+('User1'), ('User2'), ('User3'), ('User4'), ('User5'),
+('User6'), ('User7'), ('User8'), ('User9'), ('User10'),
+('User11'), ('User12'), ('User13'), ('User14'), ('User15'),
+('User16'), ('User17'), ('User18'), ('User19'), ('User20'),
+('User21'), ('User22'), ('User23'), ('User24'), ('User25'),
+('User26'), ('User27'), ('User28'), ('User29'), ('User30'),
+('User31'), ('User32'), ('User33'), ('User34'), ('User35'),
+('User36'), ('User37'), ('User38'), ('User39'), ('User40'),
+('User41'), ('User42'), ('User43'), ('User44'), ('User45'),
+('User46'), ('User47'), ('User48'), ('User49'), ('User50');
+
+-- Вставка данных в таблицу education
+INSERT INTO education (education_level) VALUES 
+('High School'), 
+('Associate Degree'),
+('Bachelor\'s Degree'),
+('Master\'s Degree'),
+('Doctorate Degree');
+
+-- Вставка данных в таблицу user_education
+INSERT INTO user_education (user_id, education_id) VALUES 
+(1, 1), (2, 2), (3, 3), (4, 4), (5, 5),
+(6, 1), (7, 2), (8, 3), (9, 4), (10, 5),
+(11, 1), (12, 2), (13, 3), (14, 4), (15, 5),
+(16, 1), (17, 2), (18, 3), (19, 4), (20, 5),
+(21, 1), (22, 2), (23, 3), (24, 4), (25, 5),
+(26, 1), (27, 2), (28, 3), (29, 4), (30, 5),
+(31, 1), (32, 2), (33, 3), (34, 4), (35, 5),
+(36, 1), (37, 2), (38, 3), (39, 4), (40, 5),
+(41, 1), (42, 2), (43, 3), (44, 4), (45, 5),
+(46, 1), (47, 2), (48, 3), (49, 4), (50, 5);
+
+-- Вставка данных в таблицу cities
+INSERT INTO cities (city_name) VALUES 
+('City1'), ('City2'), ('City3'), ('City4'), ('City5'),
+('City6'), ('City7'), ('City8'), ('City9'), ('City10'),
+('City11'), ('City12'), ('City13'), ('City14'), ('City15'),
+('City16'), ('City17'), ('City18'), ('City19'), ('City20'),
+('City21'), ('City22'), ('City23'), ('City24'), ('City25'),
+('City26'), ('City27'), ('City28'), ('City29'), ('City30'),
+('City31'), ('City32'), ('City33'), ('City34'), ('City35'),
+('City36'), ('City37'), ('City38'), ('City39'), ('City40'),
+('City41'), ('City42'), ('City43'), ('City44'), ('City45'),
+('City46'), ('City47'), ('City48'), ('City49'), ('City50');
+
+-- Вставка данных в таблицу user_cities
+INSERT INTO user_cities (user_id, city_id) VALUES 
+(1, 1), (2, 2), (3, 3), (4, 4), (5, 5),
+(6, 6), (7, 7), (8, 8), (9, 9), (10, 10),
+(11, 11), (12, 12), (13, 13), (14, 14), (15, 15),
+(16, 16), (17, 17), (18, 18), (19, 19), (20, 20),
+(21, 21), (22, 22), (23, 23), (24, 24), (25, 25),
+(26, 26), (27, 27), (28, 28), (29, 29), (30, 30),
+(31, 31), (32, 32), (33, 33), (34, 34), (35, 35),
+(36, 36), (37, 37), (38, 38), (39, 39), (40, 40),
+(41, 41), (42,42),(43 ,43),(44 ,44),(45 ,45),
+(46 ,46),(47 ,47),(48 ,48),(49 ,49),(50 ,50);
+
+ SELECT u.user_id,
+    u.user_name,
+    uc_f.city_name,
+    e.education_id,
+    e.education_level
+   FROM users u
+     LEFT JOIN user_education ON user_education.user_id = u.user_id
+     LEFT JOIN education e ON e.education_id = user_education.education_id
+     LEFT JOIN ( SELECT uc.user_id,
+            string_agg(c.city_name::text, ', '::text) AS city_name
+           FROM user_cities uc
+             LEFT JOIN cities c ON c.city_id = uc.city_id
+          GROUP BY uc.user_id) uc_f ON uc_f.user_id = u.user_id;
+
+
