@@ -1,0 +1,1 @@
+sencha app upgrade C:\ext-6.2.0
